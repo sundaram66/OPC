@@ -1,4 +1,4 @@
-package Hackerrank;
+package HackerR;
 
 /**
  * Created by seetharams on 2/12/16.
