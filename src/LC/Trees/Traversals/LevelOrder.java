@@ -1,11 +1,5 @@
 package LC.Trees.Traversals;
-
-import com.sun.javafx.scene.control.skin.LabeledImpl;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by seetharams on 30/4/17.
@@ -31,45 +25,57 @@ public class LevelOrder {
         root.right.right = new TreeNode(7);
         root.right.left = new TreeNode(15);
 
-        List<List<Integer>> list = getLevelOrder(root);
+        List<List<Integer>> list1 = getLevelOrder_queue(root);
+        System.out.println(list1);
+        List<List<Integer>> list = getLevelOrder_bottomUp(root);
         System.out.println(list);
+
 
     }
 
-    // Solved using delimiter null node for Tracking levels.
-    // Can be solved by using two queues as well.
-
-    public static List<List<Integer>> getLevelOrder(TreeNode node) {
-
+    public static List<List<Integer>> getLevelOrder_queue(TreeNode node) {
         List<List<Integer>> result = new ArrayList<>();
-        Queue<TreeNode> q = new LinkedList<>();
+        List<Integer> list = new ArrayList<>();
 
+        Queue<TreeNode> q = new LinkedList<>();
         if(node == null) return result;
 
         q.add(node);
-        q.add(null);
-
-        List<Integer> list = new ArrayList<>();
-        while(!q.isEmpty()) {
-            TreeNode current = q.poll();
-            if(current == null) {
-                result.add(list);
-                if(q.peek() == null) return result;
-                q.add(null);
-                list = new ArrayList<>();
-                continue;
+        while(!q.isEmpty())  {
+            int n = q.size();
+            for(int i=0;i<n;i++) {
+                TreeNode currNode = q.peek();
+                if(currNode.left != null) q.add(currNode.left);
+                if(currNode.right != null) q.add(currNode.right);
+                list.add(q.poll().val);
             }
-            else {
-                list.add(current.val);
-                if(current.left != null) q.add(current.left);
-                if(current.right != null) q.add(current.right);
-            }
-
+            result.add(list);
+            list = new ArrayList<>();
         }
-
-
         return result;
-
-
     }
+
+    public static List<List<Integer>> getLevelOrder_bottomUp(TreeNode node) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+
+        Queue<TreeNode> q = new LinkedList<>();
+        if(node == null) return result;
+
+        q.add(node);
+        while(!q.isEmpty())  {
+            int n = q.size();
+            for(int i=0;i<n;i++) {
+                TreeNode currNode = q.peek();
+                if(currNode.left != null) q.add(currNode.left);
+                if(currNode.right != null) q.add(currNode.right);
+                list.add(q.poll().val);
+            }
+            result.add(0,list);
+            list = new ArrayList<>();
+        }
+        return result;
+    }
+
+
 }
